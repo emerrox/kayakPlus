@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useIsLogged from "../hooks/useIsLogged";
 
 const InicioSesion: React.FC = () => {
 
@@ -34,11 +35,15 @@ const users: User[] = [
   const [error, setError] = useState<string>("")
 
   const navigate = useNavigate();
+  const toggleLogin = useIsLogged((state) => state.toggleLogin);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem("isLoggedIn", "");
     
     if ( users.find((u)=>u.name === username && u.password === password) ) {
+      toggleLogin()
+      localStorage.setItem("isLoggedIn", "true");
       setError("")
       navigate("/home"); 
     }else{

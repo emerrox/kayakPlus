@@ -1,9 +1,17 @@
 import './App.css'
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import InicioSesion from './components/InicioSesion'
-import Home from './components/Home'
+import InicioSesion from './screens/InicioSesion'
+import Home from './screens/Home'
+import Landing from './screens/Landing'
+import useIsLogged from './hooks/useIsLogged'
+import { useEffect } from 'react'
 
 function App() {
+  const isLoggedIn = useIsLogged((state) => state.isLoggedIn);
+  const setLog = useIsLogged((state) => state.setLogin);
+  useEffect(()=>{
+    setLog(localStorage.getItem("isLoggedIn") == "true")
+  },[setLog])
   return (
     <>
       <header>
@@ -12,9 +20,11 @@ function App() {
       
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<InicioSesion />} />
-        <Route path="/home" element={<Home />} />
+
+        <Route path="/" element= {<Landing />} />
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <InicioSesion />} />
+        <Route path="/home" element={!isLoggedIn ? <Navigate to="/login" /> : <Home /> } />
+
       </Routes>
     </Router>
     
