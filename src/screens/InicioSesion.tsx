@@ -53,10 +53,9 @@ const users: User[] = [
   };
 
   return (
-    <div>
-      <h2>Iniciar sesión</h2>
+    <div className="cont">
       <form onSubmit={handleSubmit}>
-        <div>
+      <h2>Iniciar sesión</h2>
           <label htmlFor="username">Usuario:</label>
           <input
             type="text"
@@ -65,8 +64,6 @@ const users: User[] = [
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div>
           <label htmlFor="password">Contraseña:</label>
           <input
             type="password"
@@ -75,7 +72,6 @@ const users: User[] = [
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
         <button type="submit">Iniciar sesión</button>
       </form>
       {error!= "" && <p>{error}</p>}

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Landing (){
     return(
-        <>
+        <div className="cont">
 
         <Link to={"/home"}>
             <button>ir a home</button>
@@ -15,6 +15,6 @@ export default function Landing (){
             <button>ir a login</button>
         </Link>
         
-        </>
+        </div>
     )
 }
