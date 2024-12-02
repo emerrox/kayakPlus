@@ -1,11 +1,11 @@
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, CredentialResponse  } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
 export default function Landing (){
     const navigate = useNavigate();
 
-    const responseMessage = (response: unknown): void => {
-        console.log(response);
+    const responseMessage = (response: CredentialResponse): void => {
+        console.log("Token JWT recibido:", response.credential);
         navigate("/home");
       };
       
