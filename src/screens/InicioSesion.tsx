@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useIsLogged from "../hooks/useIsLogged";
+import { GoogleLogin } from '@react-oauth/google';
 
 const InicioSesion: React.FC = () => {
 
@@ -28,6 +29,12 @@ const users: User[] = [
   },
 ];
 
+const responseMessage = (response) => {
+  console.log(response);
+};
+const errorMessage = (error) => {
+  console.log(error);
+};
 
 
   const [username, setUsername] = useState<string>("");
@@ -73,6 +80,7 @@ const users: User[] = [
             required
           />
         <button type="submit">Iniciar sesión</button>
+        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </form>
       {error!= "" && <p>{error}</p>}
     </div>
