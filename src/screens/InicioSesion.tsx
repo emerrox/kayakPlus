@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useIsLogged from "../hooks/useIsLogged";
-import { GoogleLogin } from '@react-oauth/google';
+import { googleLogout, GoogleLogin } from '@react-oauth/google';
 
 const InicioSesion: React.FC = () => {
 
@@ -29,13 +29,19 @@ const users: User[] = [
   },
 ];
 
-const responseMessage = (response) => {
+const responseMessage = (response: unknown): void => {
+  toggleLogin()
   console.log(response);
-};
-const errorMessage = (error) => {
-  console.log(error);
+  navigate("/home");
 };
 
+const errorMessage = (): void => {
+  console.log('algo va mal en el login');
+};
+
+const logOut = () => {
+  googleLogout();
+};
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -83,6 +89,7 @@ const errorMessage = (error) => {
         <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
       </form>
       {error!= "" && <p>{error}</p>}
+      <button onClick={logOut}>cerrar sesion</button>
     </div>
   );
 };

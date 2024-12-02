@@ -1,12 +1,12 @@
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import InicioSesion from './screens/InicioSesion';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+// import InicioSesion from './screens/InicioSesion';
 import Home from './screens/Home';
 import Landing from './screens/Landing';
 import useIsLogged from './hooks/useIsLogged';
 import { useEffect } from 'react';
 
 function App() {
-  const isLoggedIn = useIsLogged((state) => state.isLoggedIn);
+  // const isLoggedIn = useIsLogged((state) => state.isLoggedIn);
   const setLog = useIsLogged((state) => state.setLogin);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <InicioSesion />} />
-          <Route path="/home" element={!isLoggedIn ? <Navigate to="/login" /> : <Home />} />
+          {/* <Route path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <InicioSesion />} /> */}
+          <Route path="/home" element={<Home />} />
         </Routes>
       </Router>
       <div className='fixed bottom-0 -right-0 translate-x-48 rounded-full w-96 h-96 blur-3xl mix-blend opacity-30 bg-royal-blue-900'></div>

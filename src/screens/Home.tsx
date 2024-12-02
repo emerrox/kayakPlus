@@ -1,19 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useIsLogged from "../hooks/useIsLogged";
+// import useIsLogged from "../hooks/useIsLogged";
 import Calendar from "../components/Fullcalendar";
+import { googleLogout } from "@react-oauth/google";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const toggleLogin = useIsLogged((state) => state.toggleLogin);
+  // const toggleLogin = useIsLogged((state) => state.toggleLogin);
 
   // Función para cerrar sesión
   const handleLogout = () => {
-    toggleLogin();
-    localStorage.removeItem("isLoggedIn");
-    setTimeout(() => {
-      navigate("/");
-    }, 0);
+    googleLogout();
+    navigate("/");
   };
 
   return (
