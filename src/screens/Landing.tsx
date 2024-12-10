@@ -16,7 +16,6 @@ export default function Landing (){
         try {
           const response = await fetch(VALIDATE_URL, {
             method: "POST",
-            mode: 'no-cors',
             headers: {
               "Content-Type": "application/json", 
             },

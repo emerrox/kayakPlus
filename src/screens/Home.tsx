@@ -11,7 +11,6 @@ const Home: React.FC = () => {
     try {
       await fetch(LOGOUT_URL,{
         method: "POST",
-        mode: 'no-cors',
         credentials: 'include'
       })
     } catch (error) {
