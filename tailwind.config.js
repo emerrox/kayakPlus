@@ -1,5 +1,5 @@
 // tailwind.config.js
-const plugin = require('tailwindcss/plugin');
+import plugin from 'tailwindcss/plugin';
 
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
