@@ -1,16 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import useIsLogged from "../hooks/useIsLogged";
 import Calendar from "../components/Fullcalendar";
 import { googleLogout } from "@react-oauth/google";
+import { LOGOUT_URL } from '../apiName'
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  // const toggleLogin = useIsLogged((state) => state.toggleLogin);
-
-  // Función para cerrar sesión
-  const handleLogout = () => {
+  const handleLogout = async () => {
     googleLogout();
+    try {
+      await fetch(LOGOUT_URL,{
+        method: "POST",
+        credentials: 'include'
+      })
+    } catch (error) {
+      console.log(error);
+    }
     navigate("/");
   };
 
