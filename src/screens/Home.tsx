@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar from "../components/Fullcalendar";
 import { googleLogout } from "@react-oauth/google";
-import { LOGOUT_URL } from '../apiName'
+import { LOGOUT_URL,GROUP_URL } from '../apiName'
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     googleLogout();
     try {
@@ -18,6 +19,27 @@ const Home: React.FC = () => {
     }
     navigate("/");
   };
+
+  const createGroup = async () => {
+    try {
+      const response=await fetch(GROUP_URL,{
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify({ name: 'kayak-prueba' })
+      })
+      if (!response.ok) {
+        throw new Error(`Error al crear grupo: ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log('Grupo creado:', data);
+      
+    } catch (error) {
+      console.log('error: ', error);    
+    }
+  }
 
   return (
     <div className="flex flex-col items-center gap-12 w-full p-5" >
@@ -37,13 +59,20 @@ const Home: React.FC = () => {
         <Calendar />
       </div>
 
-      {/* Botón para cerrar sesión */}
       <button
         onClick={handleLogout}
         className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition-transform"
       >
         Cerrar sesión
       </button>
+
+      <button
+        onClick={createGroup}
+        className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition-transform"
+      >
+        Crear grupo
+      </button>
+
     </div>
   );
 };
