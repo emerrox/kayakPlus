@@ -1,6 +1,9 @@
-export const VALIDATE_URL:string = 'https://kayak-back.vercel.app/api/login' 
-export const LOGOUT_URL:string = 'https://kayak-back.vercel.app/api/logout' 
-export const GROUP_URL:string = 'https://kayak-back.vercel.app/api/groups' 
+export const VALIDATE_URL:string = 'https://kayak-back-production.up.railway.app/api/login' 
+export const LOGOUT_URL:string = 'https://kayak-back-production.up.railway.app/api/logout' 
+export const GROUP_URL:string = 'https://kayak-back-production.up.railway.app/api/groups' 
+export const EVENTS_URL:string = 'https://kayak-back-production.up.railway.app/api/events' 
+export const MY_GROUPS_URL:string = 'https://kayak-back-production.up.railway.app/api/groupsUsers' 
+export const INVITES_URL:string = 'https://kayak-back-production.up.railway.app/api/invites' 
 
 // export const VALIDATE_URL:string = 'http://localhost:3000/api/login' 
 // export const LOGOUT_URL:string = 'http://localhost:3000/api/logout' 

@@ -1,59 +1,21 @@
-import { GoogleLogin, CredentialResponse  } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
-import {VALIDATE_URL} from '../apiName'
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import useIsLogged from '../contexts/useIsLogged';
+import { useState } from 'react';
 
 export default function Landing (){
-    
+    const { responseMessage, errorMessage } = useIsLogged();
+    const [searchParams] = useSearchParams();
+    const paramToken = searchParams.get('token') || '';
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-
-    const responseMessage = async (response: CredentialResponse): Promise<void> => {
-      const token = response.credential;
-      console.log(response);
-      
-  
-      if (token) {
-        try {
-          const response = await fetch(VALIDATE_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", 
-            },
-            body: JSON.stringify({ oauthToken: token }),
-            credentials: 'include'
-          });
-  
-          if (!response.ok) {
-            throw new Error("Error en la autenticación.");
-          }
-  
-          const data = await response.json();
-          console.log("Respuesta del backend:", data);
-  
-          navigate("/home");
-        } catch (error) {
-          console.error("Error al enviar el token al backend:", error);
-        }
-      } else {
-        console.error("No se recibió el token.");
-      }
-    };
-      
-      const errorMessage = (): void => {
-        console.log('algo va mal en el login');
-      };
-
-    return(
+    return (
         <div className="cont">
-
-        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-
-
-
-        {/* <Link to={"/login"}>
-            <button>ir a login</button>
-        </Link> */}
-        
+            {loading ? <h4>loading...</h4> : <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
+            {/* <Link to={"/login"}>
+                <button>ir a login</button>
+            </Link> */}
         </div>
-    )
+    );
 }
