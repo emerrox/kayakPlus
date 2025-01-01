@@ -3,6 +3,7 @@ import { googleLogout } from "@react-oauth/google";
 import Calendar from "../components/Fullcalendar";
 import { EVENTS_URL, GROUP_URL, INVITES_URL, MY_GROUPS_URL } from "../apiName";
 import useIsLogged from "../contexts/useIsLogged";
+import { toast } from 'sonner'
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -29,9 +30,11 @@ const Home: React.FC = () => {
       }
       const data = await response.json();
       console.log('Grupo creado:', data);
+      toast.success('Grupo creado correctamente')
       
     } catch (error) {
       console.log('error: ', error);    
+      toast.error('Error al crear grupo')
     }
   }
 
@@ -50,9 +53,11 @@ const Home: React.FC = () => {
       }
       const data = await response.json();
       console.log('Grupo eliminado:', data);
-      
+      toast.success('Grupo eliminado correctamente')
+
     } catch (error) {
       console.log('error: ', error);    
+      toast.error('Error al eliminar grupo')
     }
   }
 
@@ -68,11 +73,14 @@ const Home: React.FC = () => {
       if (!response.ok) {
         throw new Error(`Error al ver tus grupos: ${response.statusText}`);
       }
+
       const data = await response.json();
       console.log(data);
-      
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      toast('Grupos: '+ data.map((group: any) => group.name).join(', '))
     } catch (error) {
       console.log('error: ', error);    
+      toast.error('Error al buscar grupos')
     }
   }
 
@@ -91,9 +99,10 @@ const Home: React.FC = () => {
       }
       const data = await response.json();
       console.log(data);
-      
+      toast.success('Saliste del grupo correctamente')
     } catch (error) {
-      console.log('error: ', error);    
+      console.log('error: ', error);  
+      toast.error('Error al salir del grupo')
     }
   }
 
@@ -115,9 +124,10 @@ const Home: React.FC = () => {
       }
       const data = await response.json();
       console.log(data);
-      
+      toast.success('Invitacion creada correctamente')
     } catch (error) {
       console.log('error: ', error);    
+      toast.error('Error al crear invitacion')
     }
   }
 
@@ -140,9 +150,10 @@ const Home: React.FC = () => {
       }
       const data = await response.json();
       console.log(data);
-      
+      toast.success('Rol cambiado correctamente')
     } catch (error) {
-      console.log('error: ', error);    
+      console.log('error: ', error); 
+      toast.error('Error al cambiar rol')
     }
   }
 
@@ -173,9 +184,10 @@ const Home: React.FC = () => {
     }
     const data = await response.json();
     console.log(data);
-      
+    toast.success('Evento creado correctamente')
     } catch (error) {
-      console.log('error: ', error);    
+      console.log('error: ', error);
+      toast.error('Error al crear evento')
     }
   }
 

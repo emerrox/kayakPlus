@@ -13,7 +13,6 @@ function App() {
                     flex flex-col items-center justify-around
                     min-h-screen px-5 overflow-auto
                   bg-backgroundColor text-textPrimary">
-
       <header className="text-center mb-10 w-full">
         <h1 className="font-headings text-4xl font-extrabold tracking-wide mb-8">KAYAK+</h1>
       </header>
