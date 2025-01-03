@@ -1,5 +1,5 @@
 import { EVENTS_URL } from "@/apiName";
-import useIsLogged from '../../contexts/useIsLogged';
+import useIsLogged from "@/contexts/useIsLogged";
 import { toast } from "sonner";
 
 const { token } = useIsLogged.getState();

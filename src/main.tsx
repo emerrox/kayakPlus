@@ -9,7 +9,7 @@ const clientId = import.meta.env.VITE_CLIENT_ID;
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId= {clientId}>
     <StrictMode>
-<Toaster richColors position="top-center" />
+<Toaster richColors position="bottom-right" />
 
       <App />
     </StrictMode>

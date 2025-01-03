@@ -37,7 +37,6 @@ export default function Calendar() {
                     h-[50vh] min-h-[500px] transition-all duration-300 
                     hover:shadow-[5px_10px_10px_rgba(115,124,173,0.838)] relative 
                     ">
-      <div className='absolute left-2/4 -translate-y-48 overflow-hidden rounded-full w-96 h-96 blur-3xl mix-blend opacity-30 bg-royal-blue-400 '></div>
     
       <FullCalendar
         plugins={[dayGridWeekPlugin]}

@@ -4,18 +4,24 @@ import { VALIDATE_URL, MY_GROUPS_URL } from '../apiName';
 
 type Store = {
   isLogged: boolean;
+  email: string;
+  pictureUrl: string;
+  name: string;
   token: string;
-  setToken: (newToken: string) => void;
+  setToken: ({ token, email, name }: { token: string; email: string; name: string }) => void;
   responseMessage: (response: CredentialResponse, paramToken: string, navigate: (path: string) => void, setLoading: (loading: boolean) => void) => Promise<void>;
   errorMessage: () => void;
 };
 
 const useIsLogged = create<Store>((set) => ({
+  email: '',
+  pictureUrl: '',
+  name: '',
   isLogged: localStorage.getItem('token') ? true : false, 
   token: '',
-  setToken: (newToken: string) => {
-    localStorage.setItem('token', newToken);
-    set(() => ({ token: newToken, isLogged: true }));
+  setToken: ({ token, email, name }: { token: string; email: string; name: string }) => {
+    localStorage.setItem('token', token);
+    set(() => ({ token, isLogged: true, email, name }));
   },
   responseMessage: async (response: CredentialResponse, paramToken: string, navigate: (path: string) => void, setLoading: (loading: boolean) => void): Promise<void> => {
     try {
@@ -28,8 +34,9 @@ const useIsLogged = create<Store>((set) => ({
         body: JSON.stringify({ credential: response.credential })
       });
       const data = await backendResponse.json();
+      console.log(data);
       
-      set(() => ({ token: data.token, isLogged: true }));
+      set(() => ({ token: data.token, isLogged: true, email: data.email, name: data.name, pictureUrl: data.picture }));
       localStorage.setItem('token', data.token);
       
       if (paramToken !== '' && paramToken !== null) {

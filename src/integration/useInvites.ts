@@ -1,6 +1,7 @@
+import { INVITES_URL } from '@/apiName';
+import useIsLogged from '@/contexts/useIsLogged';
 import { toast } from 'sonner';
-import { INVITES_URL } from '../../apiName';
-import useIsLogged from '../../contexts/useIsLogged';
+
 
 const useInvites = () => {
   const { token } = useIsLogged();

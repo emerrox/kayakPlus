@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import Calendar from "../components/Fullcalendar";
-import useGroups from "@/hooks/integration/useGroups";
+import useGroups from "@/integration/useGroups";
+import Sidebar from "@/layout/Sidebar";
+import MainLayout from "@/layout/MainLayout";
+
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +21,8 @@ const Home: React.FC = () => {
 
 
   return (
+  <Sidebar>
+    <MainLayout>
     <div className="flex flex-col items-center gap-12 w-full p-5" >
       <h2 className="text-2xl font-bold text-center text-textPrimary">Bienvenido a Home</h2>
       <Calendar />
@@ -36,6 +41,8 @@ const Home: React.FC = () => {
         mostrar grupos
       </button>
     </div>
+    </MainLayout>
+    </Sidebar>
   );
 };
 

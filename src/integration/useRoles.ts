@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
-import { MY_GROUPS_URL } from '../../apiName';
-import useIsLogged from '../../contexts/useIsLogged';
+import { MY_GROUPS_URL } from '../apiName';
+import useIsLogged from '../contexts/useIsLogged';
 
 const useRoles = () => {
   const { token } = useIsLogged();
