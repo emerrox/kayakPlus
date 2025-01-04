@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, LogOut, Search, Settings } from "lucide-react";
+import { Home, LogOut, Settings, Users, UserRoundPen } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,49 +9,59 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 // import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Button } from "./ui/button";
 import useIsLogged from "@/contexts/useIsLogged";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useGroups from "@/integration/useGroups";
+import { useEffect, useState } from "react";
+import { Groups } from "@/types";
 
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: "Inicio",
+    url: "/home",
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Perfil",
     url: "#",
-    icon: Inbox,
+    icon: UserRoundPen,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
+    title: "Ajustes",
     url: "#",
     icon: Settings,
   },
+  // {
+  //   title: "Grupos",
+  //   url: "#",
+  //   icon: Users,
+  // },
 ];
 
 export function AppSidebar() {
   const { open, toggleSidebar, isMobile, openMobile } = useSidebar();
   const {email,name,pictureUrl}=useIsLogged();
-useEffect(() => {
-  console.log(open, openMobile);
-},[open, openMobile]);
+  const navigate = useNavigate();
+  const {getGroups} = useGroups();
+  // let groups:Groups|undefined;
+  const [groups, setGroups] = useState<Groups[]|undefined>(undefined);
+  useEffect(() => {
+    async function fetchGroups() {
+      const groupsData = await getGroups();
+      setGroups(groupsData);
+    }
+    fetchGroups();
+  }, []);
+
   return (
     <>
       {isMobile ?(
@@ -76,10 +86,10 @@ useEffect(() => {
                         {items.map((item) => (
                           <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton asChild>
-                              <a href={item.url}>
+                              <span onClick={()=> navigate(item.url)}>
                                 <item.icon />
                                 <span>{item.title}</span>
-                              </a>
+                              </span>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
                         ))}
@@ -112,19 +122,41 @@ useEffect(() => {
         <Sidebar collapsible="icon">
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Application</SidebarGroupLabel>
+              <SidebarGroupLabel>KayakPlus</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <a href={item.url}>
+                        <span onClick={()=> navigate(item.url)}>
                           <item.icon />
                           <span>{item.title}</span>
-                        </a>
+                        </span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
+                  <SidebarMenuItem key={"Grupos"}>
+                    <SidebarMenuButton asChild >
+                      <span onClick={()=> navigate("/groups")}>
+                      <Users/>
+                          <span>{"Grupos"}</span>
+                        </span>
+                    </SidebarMenuButton>
+                    
+                    < SidebarMenuSub>
+
+                      {groups?.map((group) => (
+                        <SidebarMenuSubItem key={group.id}>
+                          <SidebarMenuSubButton asChild>
+                            <span onClick={()=> navigate(`/groups/${group.id}`)}>
+                              <span>{group.name}</span>
+                            </span>
+                          </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      ))}
+                    </ SidebarMenuSub>
+
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>

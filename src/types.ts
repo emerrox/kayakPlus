@@ -9,3 +9,7 @@ export interface CalendarProps {
 events: Event[];
 }
 
+export interface Groups {
+  id: string;
+  name: string;
+}
