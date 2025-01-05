@@ -167,24 +167,27 @@ export function AppSidebar() {
             {open ? '←' : '→'}
           </button>
           </SidebarContent>
-          { open &&       <SidebarFooter className="border-t border-border p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Avatar className="h-9 w-9 rounded-full">
-            <AvatarImage src={pictureUrl} className="h-9 w-9 rounded-full" />
-            </Avatar>
-            <div className="ml-2">
-              <p className="text-sm font-medium">{name}</p>
-              <p className="text-xs text-muted-foreground">{email}</p>
+          <SidebarFooter className={`border-t border-border  mt-auto transition-all ${open ? "p-4" : "pl-2"}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Avatar className={` transition-all h-9 w-9 rounded-full ${open ? 'h-9 w-9' : 'h-6 w-6'}`}>
+                  <AvatarImage src={pictureUrl} className={` rounded-full }`} />
+                </Avatar>
+                {open && (
+                  <div className="ml-2 transition-all">
+                    <p className="text-sm font-medium">{name}</p>
+                    <p className="text-xs text-muted-foreground">{email}</p>
+                  </div>
+                )}
+              </div>
+              {open && (
+                <Button variant="ghost" size="icon" className="transition-all transform hover:scale-110 duration-300">
+                  <LogOut className="h-4 w-4" />
+                  <span className="sr-only">Cerrar sesión</span>
+                </Button>
+              )}
             </div>
-          </div>
-          <Button variant="ghost" size="icon">
-            <LogOut className="h-4 w-4" />
-            <span className="sr-only">Cerrar sesión</span>
-          </Button>
-        </div>
-
-      </SidebarFooter>}
+          </SidebarFooter>
         </Sidebar>
       )}
     </>
