@@ -73,7 +73,26 @@ const useGroups = () => {
     }
   };
 
-  return { createGroup, deleteGroup, getGroups };
+  async function getGroup(id: string): Promise<Groups|undefined> {
+    try {
+      const response = await fetch(`${MY_GROUPS_URL+"/" + id}`, {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error al ver tu grupo: ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      return data;
+    }catch (error) {
+      console.log('error: ', error);    
+    }
+  }
+  return { createGroup, deleteGroup, getGroups, getGroup };
 };
 
 export default useGroups;

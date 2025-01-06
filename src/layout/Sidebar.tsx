@@ -1,11 +1,12 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
+import useIsLogged from "@/contexts/useIsLogged";
 function SidebarContent({ children }: { children: React.ReactNode }) {
-
+const {token} = useIsLogged();
 
   return (
     <>
-        <AppSidebar />
+      {token && <AppSidebar />}
       {children}
     </>
   );

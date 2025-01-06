@@ -47,7 +47,6 @@ export function AppSidebar() {
   const { open, toggleSidebar, isMobile, openMobile } = useSidebar();
   const { email, name, pictureUrl } = useIsLogged();
   const { getGroups } = useGroups();
-
   const [groups, setGroups] = useState<Groups[] | undefined>(undefined);
 
   useEffect(() => {
@@ -79,7 +78,7 @@ export function AppSidebar() {
     groups?.map((group) => (
       <li key={group.id}>
         <button
-          onClick={() => navigate(`/groups/${group.id}`)}
+          onClick={() => navigate(`/group/?id=${group.id}`)}
           className="flex items-center w-full text-left p-2 rounded-md hover:bg-gray-100"
         >
           <span>{group.name}</span>
@@ -161,7 +160,7 @@ export function AppSidebar() {
                 {groups?.map((group) => (
                   <SidebarMenuSubItem key={group.id}>
                     <SidebarMenuSubButton asChild>
-                      <span onClick={() => navigate(`/groups/${group.id}`)}>
+                      <span onClick={() => navigate(`/group/?id=${group.id}`)}>
                         <span>{group.name}</span>
                       </span>
                     </SidebarMenuSubButton>
@@ -185,7 +184,7 @@ export function AppSidebar() {
     <SidebarFooter
       className={`border-t border-border mt-auto transition-all ${open ? "p-4" : "pl-2"}`}
     >
-      <div className="flex items-center justify-between">
+      <div className={`flex items-center justify-${open ? "between" : "center"}`}>
         <div className="flex items-center">
           <Avatar
             className={`transition-all rounded-full ${open ? "h-9 w-9" : "h-6 w-6"}`}

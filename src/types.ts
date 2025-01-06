@@ -13,3 +13,10 @@ export interface Groups {
   id: string;
   name: string;
 }
+
+export interface User {
+  email: string;
+  name: string;
+  picture: string;
+  token: string;
+}

@@ -1,27 +1,28 @@
 import { create } from 'zustand';
 import { CredentialResponse } from '@react-oauth/google';
 import { VALIDATE_URL, MY_GROUPS_URL } from '../apiName';
+import { User } from '@/types';
 
 type Store = {
-  isLogged: boolean;
   email: string;
   pictureUrl: string;
   name: string;
   token: string;
-  setToken: ({ token, email, name }: { token: string; email: string; name: string }) => void;
+  setToken: ({ token, email, name, picture }: { token: string; email: string; name: string; picture: string }) => void;
   responseMessage: (response: CredentialResponse, paramToken: string, navigate: (path: string) => void, setLoading: (loading: boolean) => void) => Promise<void>;
   errorMessage: () => void;
 };
+const storedUser = localStorage.getItem('user');
+const userInfo: User | null = storedUser ? JSON.parse(storedUser) : null;
 
 const useIsLogged = create<Store>((set) => ({
-  email: '',
-  pictureUrl: '',
-  name: '',
-  isLogged: localStorage.getItem('token') ? true : false, 
-  token: '',
-  setToken: ({ token, email, name }: { token: string; email: string; name: string }) => {
-    localStorage.setItem('token', token);
-    set(() => ({ token, isLogged: true, email, name }));
+  email: userInfo ? userInfo.email : '',
+  pictureUrl: userInfo ? userInfo.picture : '',
+  name: userInfo ? userInfo.name : '',
+  token: userInfo ? userInfo.token : '',
+  setToken: ({ token, email, name, picture }: { token: string; email: string; name: string; picture: string }) => {
+    localStorage.setItem('user', JSON.stringify({ token, email, name, picture }));
+    set(() => ({ token, isLogged: true, email, name, pictureUrl: picture }));
   },
   responseMessage: async (response: CredentialResponse, paramToken: string, navigate: (path: string) => void, setLoading: (loading: boolean) => void): Promise<void> => {
     try {
@@ -37,7 +38,7 @@ const useIsLogged = create<Store>((set) => ({
       console.log(data);
       
       set(() => ({ token: data.token, isLogged: true, email: data.email, name: data.name, pictureUrl: data.picture }));
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('user',  JSON.stringify(data) );
       
       if (paramToken !== '' && paramToken !== null) {
         await fetch(MY_GROUPS_URL, {
