@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+.avatar img {
+  @apply rounded-full;
+}
 @font-face {
     font-family: CalSans;
     font-style: semibold;
