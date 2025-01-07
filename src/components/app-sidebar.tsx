@@ -57,6 +57,7 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
   }, []);
 
   const handleLogout = async () => {
+    toggleSidebar()
     localStorage.removeItem("user");
     googleLogout();
     setGroups(undefined);
@@ -68,7 +69,10 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
     navigationItems.map((item) => (
       <li key={item.title}>
         <button
-          onClick={() => navigate(item.url)}
+          onClick={() => {
+            navigate(item.url)
+            toggleSidebar()
+          }}
           className="flex items-center space-x-2 w-full text-left p-2 rounded-md hover:bg-gray-100"
         >
           <item.icon />

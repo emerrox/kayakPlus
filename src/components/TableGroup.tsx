@@ -7,6 +7,18 @@ interface TableGroupProps {
     group: Group_extended;
 }
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+import { MoreHorizontal } from 'lucide-react';
+import { Button } from './ui/button';
+  
+
 const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
     // Define las columnas de la tabla
     const columns: ColumnDef<typeof group.users[number]>[] = [
@@ -28,20 +40,27 @@ const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
             header: '',
             cell: ({ row }) =>
                 row.original.role === 'writer' ? (
-                    <div className="flex gap-2">
-                        <button
-                            className="px-2 py-1 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
-                            onClick={() => handleEdit(row.original.email)}
-                        >
-                            Editar
-                        </button>
-                        <button
-                            className="px-2 py-1 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600"
-                            onClick={() => handleRemove(row.original.email)}
-                        >
-                            Eliminar
-                        </button>
-                    </div>
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" className="h-8 w-8 p-0">
+      <span className="sr-only">Open menu</span>
+      <MoreHorizontal />
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="center" className="py-1 flex align-center justify-center flex-col gap-2">
+    <DropdownMenuLabel className='flex justify-center'>Actions</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem className='flex justify-center' onClick={() => handleEdit(row.original.email)}>
+      Editar
+    </DropdownMenuItem>
+    <DropdownMenuItem 
+      className='flex justify-center !text-white !bg-red-500 hover:!bg-red-700 transition-colors duration-200'
+      onClick={() => handleRemove(row.original.email)}
+    >
+      Eliminar
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
                 ) : null,
         },
     ];
