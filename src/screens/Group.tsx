@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useGroups from '@/integration/useGroups';
-import Sidebar from '@/layout/Sidebar';
-import MainLayout from '@/layout/MainLayout';
+import { Group_extended } from '../types';
+import TableGroup from '@/components/TableGroup';
 
 const Group: React.FC = () => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id') || '';
     const { getGroup } = useGroups();
 
-    const [group, setGroup] = useState<{ name: string } | null>(null);
+    const [group, setGroup] = useState<Group_extended | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchGroup = async () => {
+        const fetchGroup = async (): Promise<Group_extended | null> => {
             setLoading(true);
             setError(null);
             try {
                 const groupData = await getGroup(id);
                 if (groupData) {
                     setGroup(groupData);
+                    return groupData;
                 } else {
                     setError('Group data is undefined.');
+                    return null;
                 }
             } catch {
                 setError('Failed to fetch group data.');
+                return null;
             } finally {
                 setLoading(false);
             }
@@ -50,15 +53,10 @@ const Group: React.FC = () => {
     if (!group) {
         return <div>No group found</div>;
     }
-
+    console.log(group.role);
+    
     return (
-        <Sidebar>
-            <MainLayout>    
-                <div className="container">
-                    <h3>{group.name}</h3>
-                </div>
-            </MainLayout>
-        </Sidebar>
+        <TableGroup group={group} />
     );
 };
 

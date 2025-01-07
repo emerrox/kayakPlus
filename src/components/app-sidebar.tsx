@@ -42,9 +42,9 @@ const navigationItems = [
   { title: "Ajustes", url: "#", icon: Settings },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Dispatch<React.SetStateAction<boolean>> }) {
   const navigate = useNavigate();
-  const { open, toggleSidebar, isMobile, openMobile } = useSidebar();
+  const { open, toggleSidebar, isMobile, openMobile, setOpenMobile } = useSidebar();
   const { email, name, pictureUrl } = useIsLogged();
   const { getGroups } = useGroups();
   const [groups, setGroups] = useState<Groups[] | undefined>(undefined);
@@ -57,7 +57,10 @@ export function AppSidebar() {
   }, []);
 
   const handleLogout = async () => {
+    localStorage.removeItem("user");
     googleLogout();
+    setGroups(undefined);
+    setLogoutTrigger(prev => !prev);
     navigate("/");
   };
 
@@ -78,7 +81,10 @@ export function AppSidebar() {
     groups?.map((group) => (
       <li key={group.id}>
         <button
-          onClick={() => navigate(`/group/?id=${group.id}`)}
+          onClick={() => {
+            navigate(`/group/?id=${group.id}`)
+            setOpenMobile(false)
+          }}
           className="flex items-center w-full text-left p-2 rounded-md hover:bg-gray-100"
         >
           <span>{group.name}</span>

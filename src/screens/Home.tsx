@@ -1,14 +1,10 @@
 import Calendar from "../components/Fullcalendar";
 import useGroups from "@/integration/useGroups";
-import Sidebar from "@/layout/Sidebar";
-import MainLayout from "@/layout/MainLayout";
 import {isMobile} from 'react-device-detect';
 
 const Home: React.FC = () => {
   const { getGroups } = useGroups();
   return (
-  <Sidebar>
-    <MainLayout>
     <div className="flex flex-col items-center gap-12 w-full p-5" >
       <h2 className="text-2xl font-bold text-center text-textPrimary">Bienvenido a Home</h2>
       {isMobile ?<div className="w-full h-96 bg-white rounded-lg shadow-md">card</div>: <Calendar /> }
@@ -20,8 +16,6 @@ const Home: React.FC = () => {
         mostrar grupos
       </button>
     </div>
-    </MainLayout>
-    </Sidebar>
   );
 };
 

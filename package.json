@@ -23,6 +23,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@react-oauth/google": "^0.12.1",
     "@shadcn/ui": "^0.0.4",
+    "@tanstack/react-table": "^8.20.6",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
     "cal-sans": "^1.0.1",

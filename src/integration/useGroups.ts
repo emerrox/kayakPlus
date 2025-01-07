@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { GROUP_URL, MY_GROUPS_URL } from '@/apiName';
 import useIsLogged from '@/contexts/useIsLogged';
-import { Groups } from '@/types';
+import { Group_extended, Groups } from '@/types';
 
 const useGroups = () => {
   const { token } = useIsLogged();
@@ -73,7 +73,7 @@ const useGroups = () => {
     }
   };
 
-  async function getGroup(id: string): Promise<Groups|undefined> {
+  async function getGroup(id: string): Promise<Group_extended|undefined> {
     try {
       const response = await fetch(`${MY_GROUPS_URL+"/" + id}`, {
         method: 'GET',
