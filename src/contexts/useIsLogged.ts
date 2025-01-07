@@ -41,14 +41,21 @@ const useIsLogged = create<Store>((set) => ({
       localStorage.setItem('user',  JSON.stringify(data) );
       
       if (paramToken !== '' && paramToken !== null) {
+        try{
         await fetch(MY_GROUPS_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': data.token
           },
-          body: JSON.stringify({ invite_token: paramToken })
-        });
+          body: JSON.stringify({
+             invite_token: paramToken,
+             name: data.name
+            })
+        })} catch (error) {
+          console.log('error en la creacion de usuario', error);
+          return;
+        }
       }
       navigate("/home");
     } catch (error) {

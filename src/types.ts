@@ -30,6 +30,7 @@ export interface User {
 }
 
 export interface User_lite {
+  name: string;
   id: string;
   email: string;
   role: string;

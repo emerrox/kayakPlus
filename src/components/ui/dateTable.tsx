@@ -1,10 +1,16 @@
+import * as React from "react"
 import {
+    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     useReactTable,
     ColumnDef,
+    SortingState,
+    getSortedRowModel,
+    getFilteredRowModel,
 } from '@tanstack/react-table';
 
+import { Input } from "@/components/ui/input"
 interface DataTableProps<T> {
     columns: ColumnDef<T>[];
     data: T[];
@@ -12,13 +18,36 @@ interface DataTableProps<T> {
 }
 
 export function DataTable<T>({ columns, data, className }: DataTableProps<T>) {
+    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+        []
+      )
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+          sorting,
+          columnFilters,
+        },
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
     });
 
     return (
+        <div>
+                  <div className="flex justify-between py-4 mx-4">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-72"
+        />
+      </div>
         <table className={`min-w-full border-collapse ${className}`}>
             <thead className="bg-gray-100">
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -51,5 +80,6 @@ export function DataTable<T>({ columns, data, className }: DataTableProps<T>) {
                 ))}
             </tbody>
         </table>
+        </div>
     );
 }
