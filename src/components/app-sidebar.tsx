@@ -3,7 +3,8 @@ import {
   LogOut,
   Settings,
   Users,
-  UserRoundPen,
+  UserRoundIcon,
+  Plus
 } from "lucide-react";
 import {
   Sidebar,
@@ -35,10 +36,20 @@ import {
   DrawerTrigger,
 } from "./ui/drawer";
 import { googleLogout } from "@react-oauth/google";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@radix-ui/react-label";
+import { Input } from "./ui/input";
 const navigationItems = [
   { title: "Inicio", url: "/home", icon: Home },
-  { title: "Perfil", url: "#", icon: UserRoundPen },
+  { title: "Perfil", url: "#", icon: UserRoundIcon },
   { title: "Ajustes", url: "#", icon: Settings },
 ];
 
@@ -46,7 +57,7 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
   const navigate = useNavigate();
   const { open, toggleSidebar, isMobile, openMobile, setOpenMobile } = useSidebar();
   const { email, name, pictureUrl } = useIsLogged();
-  const { getGroups } = useGroups();
+  const { getGroups, createGroup } = useGroups();
   const [groups, setGroups] = useState<Groups[] | undefined>(undefined);
 
   useEffect(() => {
@@ -63,6 +74,50 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
     setGroups(undefined);
     setLogoutTrigger(prev => !prev);
     navigate("/");
+  };
+
+  const GroupDialog = () => {
+    const [groupName, setGroupName] = useState("");
+  
+    const handleCreateGroup = async () => {
+      const gr = await createGroup(groupName);
+      window.location.href = `/group/?id=${gr.group.id}`;
+    };
+  
+    return (
+      <Dialog>
+        <DialogTrigger>
+          <Plus className="w-5" />
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Crear grupo nuevo</DialogTitle>
+            <DialogDescription>
+              Completa los campos para crear un nuevo grupo.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Nombre
+              </Label>
+              <Input
+                id="name"
+                placeholder="Nombre del grupo"
+                className="col-span-3"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleCreateGroup} disabled={groupName.trim() === ""}>
+              Confirmar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
   };
 
   const renderNavigationItems = () =>
@@ -161,10 +216,15 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
             ))}
             <SidebarMenuItem key="Grupos">
               <SidebarMenuButton asChild>
-                <span onClick={() => navigate("/groups")}>  
-                  <Users />
-                  <span>Grupos</span>
-                </span>
+                <div className="">
+                    <Users />
+                    <span>Grupos</span>
+                  <div onClick={() => navigate("/groups")} className="flex items-center">
+                  </div>
+                  <div className="relative left-28"> 
+                    <GroupDialog />
+                  </div>
+                </div>
               </SidebarMenuButton>
               <SidebarMenuSub>
                 {groups?.map((group) => (

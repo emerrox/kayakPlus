@@ -6,7 +6,7 @@ import { Group_extended, Groups } from '@/types';
 const useGroups = () => {
   const { token } = useIsLogged();
 
-  const createGroup = async () => {
+  const createGroup = async (name: string) => {
     try {
       const response = await fetch(GROUP_URL, {
         method: 'POST',
@@ -14,21 +14,22 @@ const useGroups = () => {
           "Content-Type": "application/json", 
           "Authorization": token
         },
-        body: JSON.stringify({ name: 'kayak-prueba22' })
+        body: JSON.stringify({ name: name })
       });
       if (!response.ok) {
         throw new Error(`Error al crear grupo: ${response.statusText}`);
       }
       const data = await response.json();
-      console.log('Grupo creado:', data);
+      // console.log('Grupo creado:', data);
       toast.success('Grupo creado correctamente');
+      return data;
     } catch (error) {
       console.log('error: ', error);    
       toast.error('Error al crear grupo');
     }
   };
 
-  const deleteGroup = async () => {
+  const deleteGroup = async (id:string) => {
     try {
       const response = await fetch(GROUP_URL, {
         method: 'DELETE',
@@ -36,7 +37,7 @@ const useGroups = () => {
           "Content-Type": "application/json", 
           "Authorization": token
         },
-        body: JSON.stringify({ id: "86e47c5e-dd5a-4430-a4aa-d0c7658f74c1" })
+        body: JSON.stringify({ id: id })
       });
       if (!response.ok) {
         throw new Error(`Error al eliminar grupo: ${response.statusText}`);
@@ -92,7 +93,31 @@ const useGroups = () => {
       console.log('error: ', error);    
     }
   }
-  return { createGroup, deleteGroup, getGroups, getGroup };
+
+  async function deleteUserFromGroup (groupId: string, email: string) {
+    try {
+      const response = await fetch(MY_GROUPS_URL, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+        body: JSON.stringify({ groupId, email })
+      });
+      if (!response.ok) {
+        throw new Error(`Error al eliminar usuario del grupo: ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      toast.success('Usuario eliminado del grupo correctamente');
+    }
+    catch (error) {
+      console.log('error: ', error);    
+      toast.error('Error al eliminar usuario del grupo');
+    }
+  }
+
+  return { createGroup, deleteGroup, getGroups, getGroup, deleteUserFromGroup };
 };
 
 export default useGroups;
