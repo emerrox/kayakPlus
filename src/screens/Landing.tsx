@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import useIsLogged from '../contexts/useIsLogged';
 import { useState } from 'react';
 import 'ldrs/ring'
+import { Loader } from '@mantine/core';
 
 export default function Landing (){
     const { responseMessage, errorMessage } = useIsLogged();
@@ -15,13 +16,7 @@ export default function Landing (){
 
         <div className="cont">
             {loading ?
-                <l-ring
-                size="40"
-                stroke="5"
-                bg-opacity="0"
-                speed="2"
-                color="black" 
-                ></l-ring>: <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
+                <Loader color="black" />: <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
             {/* <Link to={"/login"}>
                 <button>ir a login</button>
             </Link> */}
