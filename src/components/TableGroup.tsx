@@ -5,6 +5,7 @@ import { Group_extended } from '../types';
 import { ArrowUpDown } from "lucide-react"
 interface TableGroupProps {
     group: Group_extended;
+    fetchGroup: (id:string) => Promise<void>;
 }
 
 import {
@@ -17,9 +18,14 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from './ui/button';
+import useGroups from '@/integration/useGroups';
+import useRoles from '@/integration/useRoles';
   
 
-const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
+const TableGroup: React.FC<TableGroupProps> = ({ group , fetchGroup}) => {
+  const { setRole } = useRoles();
+  const { deleteUserFromGroup } = useGroups();
+
   const columns: ColumnDef<typeof group.users[number]>[] = [
       {
           accessorKey: 'role',
@@ -72,7 +78,7 @@ const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
         id: 'actions',
         header: '',
         cell: ({ row }) =>
-            row.original.role === 'writer' ? (
+            group.role === 'writer' ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
@@ -83,8 +89,8 @@ const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
                 <DropdownMenuContent align="center" className="py-1 flex align-center justify-center flex-col gap-2">
                   <DropdownMenuLabel className='flex justify-center'>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className='flex justify-center' onClick={() => handleEdit(row.original.email)}>
-                    Editar
+                  <DropdownMenuItem className='flex justify-center' onClick={() => handleEdit(row.original.email, row.original.role)}>
+                    Cambiar rol
                   </DropdownMenuItem>
                   <DropdownMenuItem 
                     className='flex justify-center !text-white !bg-red-500 hover:!bg-red-700 transition-colors duration-200'
@@ -99,12 +105,16 @@ const TableGroup: React.FC<TableGroupProps> = ({ group }) => {
   ];
 
   // Funciones de manejo (simples, para extender según necesidades)
-  const handleEdit = (email: string) => {
-      alert(`Editando configuración para: ${email}`);
+  const handleEdit =async (email: string, rol:string) => {
+      await setRole(group.id, rol === 'writer' ? 'reader' : 'writer', email);
+      await fetchGroup(group.id);
+
   };
 
-  const handleRemove = (email: string) => {
-      alert(`Eliminando usuario: ${email}`);
+  const handleRemove = async (email: string) => {
+    await deleteUserFromGroup(group.id, email);
+    await fetchGroup(group.id);
+
   };
 
   return (

@@ -6,7 +6,7 @@ import { Group_extended, Groups } from '@/types';
 const useGroups = () => {
   const { token } = useIsLogged();
 
-  const createGroup = async (name: string) => {
+  const createGroup = async (name: string): Promise<Group_extended|undefined> => {
     try {
       const response = await fetch(GROUP_URL, {
         method: 'POST',
@@ -20,7 +20,7 @@ const useGroups = () => {
         throw new Error(`Error al crear grupo: ${response.statusText}`);
       }
       const data = await response.json();
-      // console.log('Grupo creado:', data);
+      console.log('Grupo creado:', data);
       toast.success('Grupo creado correctamente');
       return data;
     } catch (error) {

@@ -2,6 +2,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import useIsLogged from '../contexts/useIsLogged';
 import { useState } from 'react';
+import 'ldrs/ring'
 
 export default function Landing (){
     const { responseMessage, errorMessage } = useIsLogged();
@@ -13,7 +14,14 @@ export default function Landing (){
     return (
 
         <div className="cont">
-            {loading ? <h4>loading...</h4> : <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
+            {loading ?
+                <l-ring
+                size="40"
+                stroke="5"
+                bg-opacity="0"
+                speed="2"
+                color="black" 
+                ></l-ring>: <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
             {/* <Link to={"/login"}>
                 <button>ir a login</button>
             </Link> */}

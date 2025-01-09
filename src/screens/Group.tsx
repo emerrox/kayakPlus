@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useGroups from '@/integration/useGroups';
 import { Group_extended } from '../types';
@@ -15,6 +15,9 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import useIsLogged from '@/contexts/useIsLogged';
+import 'ldrs/ring'
+
+
 const Group: React.FC = () => {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id') || '';
@@ -25,37 +28,42 @@ const Group: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchGroup = async (): Promise<Group_extended | null> => {
-            setLoading(true);
-            setError(null);
-            try {
-                const groupData = await getGroup(id);
-                if (groupData) {
-                    setGroup(groupData);
-                    return groupData;
-                } else {
-                    setError('Group data is undefined.');
-                    return null;
-                }
-            } catch {
-                setError('Failed to fetch group data.');
-                return null;
-            } finally {
-                setLoading(false);
+    const fetchGroup = useCallback(async (id:string): Promise<void> => {
+        setLoading(true);
+        setError(null);
+        try {
+            const groupData = await getGroup(id);
+            if (groupData) {
+                setGroup(groupData);
+            } else {
+                setError('Group data is undefined.');
             }
-        };
-
+        } catch {
+            setError('Failed to fetch group data.');
+        } finally {
+            setLoading(false);
+        }
+    }, [id, getGroup]);
+    
+    useEffect(() => {
         if (id) {
-            fetchGroup();
+            fetchGroup(id);
         } else {
             setError('Invalid group ID.');
             setLoading(false);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className='w-full h-screen flex justify-center items-center'>  
+        <l-ring
+          size="40"
+          stroke="5"
+          bg-opacity="0"
+          speed="2"
+          color="black" 
+        ></l-ring></div>;
     }
 
     if (error) {
@@ -68,8 +76,8 @@ const Group: React.FC = () => {
     console.log(group.role);
     
     return (
-        <>
-            <TableGroup group={group} />
+        <div className="flex flex-col items-center gap-12 w-full p-5 max-h-fit m-0">
+            <TableGroup group={group} fetchGroup={fetchGroup}  />
             <div className="flex justify-center mt-4 buttons">
                 {group.role === 'writer' && 
                 <AlertDialog>
@@ -113,7 +121,7 @@ const Group: React.FC = () => {
                     </AlertDialogContent>
                 </AlertDialog>  
             </div>
-        </>
+        </div>
     );
 };
 

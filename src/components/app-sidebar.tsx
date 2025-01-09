@@ -4,7 +4,7 @@ import {
   Settings,
   Users,
   UserRoundIcon,
-  Plus
+  Plus,
 } from "lucide-react";
 import {
   Sidebar,
@@ -27,7 +27,7 @@ import useIsLogged from "@/contexts/useIsLogged";
 import { useNavigate } from "react-router-dom";
 import useGroups from "@/integration/useGroups";
 import { useEffect, useState } from "react";
-import { Groups } from "@/types";
+import { Group_extended, Groups } from "@/types";
 import { Drawer } from "vaul";
 import {
   DrawerContent,
@@ -47,6 +47,8 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@radix-ui/react-label";
 import { Input } from "./ui/input";
+import { AlertDialog, AlertDialogDescription, AlertDialogTitle } from "@radix-ui/react-alert-dialog";
+import { AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from "./ui/alert-dialog";
 const navigationItems = [
   { title: "Inicio", url: "/home", icon: Home },
   { title: "Perfil", url: "#", icon: UserRoundIcon },
@@ -55,7 +57,7 @@ const navigationItems = [
 
 export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Dispatch<React.SetStateAction<boolean>> }) {
   const navigate = useNavigate();
-  const { open, toggleSidebar, isMobile, openMobile, setOpenMobile } = useSidebar();
+  const { open, toggleSidebar, isMobile, openMobile, setOpenMobile, setOpen } = useSidebar();
   const { email, name, pictureUrl } = useIsLogged();
   const { getGroups, createGroup } = useGroups();
   const [groups, setGroups] = useState<Groups[] | undefined>(undefined);
@@ -78,10 +80,15 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
 
   const GroupDialog = () => {
     const [groupName, setGroupName] = useState("");
-  
+    const [isSelected, setIsSelected] = useState(false);
+    const [accept, setAccept] = useState(false);
+    const [group, setGroup] = useState<Group_extended| undefined>()
+
     const handleCreateGroup = async () => {
       const gr = await createGroup(groupName);
-      window.location.href = `/group/?id=${gr.group.id}`;
+      setGroup(gr)
+      setAccept(true)
+      console.log(gr);
     };
   
     return (
@@ -110,10 +117,41 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
               />
             </div>
           </div>
+
+
           <DialogFooter>
-            <Button onClick={handleCreateGroup} disabled={groupName.trim() === ""}>
-              Confirmar
-            </Button>
+              <Button onClick={handleCreateGroup} disabled={groupName.trim() === ""}>
+                Confirmar
+              </Button>
+          <AlertDialog open={accept}>
+            
+            <AlertDialogContent className="bg-yellow-50 border-yellow-500 ">
+              <AlertDialogHeader>
+              <AlertDialogTitle className=" text-lg font-bold " >ALERTA </AlertDialogTitle>
+              <AlertDialogDescription>
+              Revisa el correo que te hemos enviado y clica en el enlace{" "}
+              <span className="font-semibold text-blue-900">Añadir este calendario.</span>
+              </AlertDialogDescription>
+
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+              <label className="flex items-center space-x-2 mt-4">
+            <input type="checkbox" className="form-checkbox" checked={isSelected} onChange={() => setIsSelected(!isSelected)} />
+            <span>Confirmo que he revisado el correo.</span>
+          </label>
+                <Button disabled={!isSelected} onClick={async()=>{
+                  setAccept(false)
+                  console.log(group);
+                  console.log(group?.id);
+                  const gr = await getGroups()
+                  setGroups(gr)
+                  // window.location.href = `/group/?id=${group?.id}`;
+                  
+                } 
+              } > Aceptar</Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -207,7 +245,10 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
             {navigationItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <span onClick={() => navigate(item.url)}>
+                  <span onClick={() => {
+                    navigate(item.url)
+                    setOpen(false)
+                    }}>
                     <item.icon />
                     <span>{item.title}</span>
                   </span>
@@ -230,7 +271,10 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
                 {groups?.map((group) => (
                   <SidebarMenuSubItem key={group.id}>
                     <SidebarMenuSubButton asChild>
-                      <span onClick={() => navigate(`/group/?id=${group.id}`)}>
+                      <span onClick={() => {
+                        navigate(`/group/?id=${group.id}`)
+                        toggleSidebar()
+                        }}>
                         <span>{group.name}</span>
                       </span>
                     </SidebarMenuSubButton>

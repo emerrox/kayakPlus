@@ -9,15 +9,13 @@ function App() {
   return (
     <div className="font-geist m-0 p-0 w-full flex flex-col items-center justify-around min-h-screen px-5 overflow-auto bg-backgroundColor text-textPrimary">
       <Router>
-      <Sidebar>
         <MainLayout >
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/group/*" element={<Group  />} />
+          <Route path="/home" element={<Sidebar><Home /></Sidebar> } />
+          <Route path="/group/*" element={<Sidebar><Group  /></Sidebar>} />
         </Routes>
         </MainLayout>
-      </Sidebar >
       </Router>
     </div>
   );
