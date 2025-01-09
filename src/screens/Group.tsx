@@ -42,7 +42,7 @@ const Group: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [id, getGroup]);
+  }, [id]);
 
   useEffect(() => {
     if (id) {
