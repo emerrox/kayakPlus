@@ -3,7 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import useIsLogged from '../contexts/useIsLogged';
 import { useState } from 'react';
 import 'ldrs/ring'
-import { Loader } from '@mantine/core';
+import { Oval } from 'react-loader-spinner'
 
 export default function Landing (){
     const { responseMessage, errorMessage } = useIsLogged();
@@ -15,8 +15,17 @@ export default function Landing (){
     return (
 
         <div className="cont">
-            {loading ?
-                <Loader color="black" />: <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
+            <Oval
+            visible={loading}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="oval-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+           {loading || <GoogleLogin onSuccess={(response) => responseMessage(response, paramToken, navigate, setLoading)} onError={errorMessage} />}
+           
             {/* <Link to={"/login"}>
                 <button>ir a login</button>
             </Link> */}
