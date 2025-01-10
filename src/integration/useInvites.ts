@@ -26,13 +26,36 @@ const useInvites = () => {
       const data = await response.json();
       console.log(data);
       toast.success('Invitación creada correctamente');
+      return data.link
     } catch (error) {
       console.log('error: ', error);    
       toast.error('Error al crear invitación');
     }
   };
 
-  return { createInvite };
+
+  const getInvites = async (groupId: string) => {
+    try {
+      const response = await fetch(`${INVITES_URL}?groupId=${groupId}`, {
+        method: 'GET',
+        headers: {
+          "Authorization": token
+        },
+      });
+
+      if (response.status !== 200) {
+        return null;
+      }
+
+      const data = await response.json();
+      return data.link; 
+    } catch (error) {
+      console.log('error: ', error);
+      return null;
+    }
+  };
+
+  return { createInvite, getInvites };
 };
 
 export default useInvites;
