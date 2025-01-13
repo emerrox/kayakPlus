@@ -189,14 +189,15 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
       </li>
     ));
 
+
   const renderDrawerContent = () => (
-    <DrawerContent className="p-0 bg-white">
+    <DrawerContent className="p-0 bg-white max-h-[80vh] ">
       <div className="sr-only">
         <DrawerTitle>Menú de Navegación</DrawerTitle>
         <DrawerDescription>Usa este menú para navegar por las secciones de la aplicación.</DrawerDescription>
       </div>
 
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full overflow-scroll">
         <div className="flex-1 p-4">
           <h2 className="text-lg font-semibold mb-4">Application</h2>
           <ul className="space-y-2">
@@ -337,7 +338,9 @@ export function AppSidebar({  setLogoutTrigger }: { setLogoutTrigger: React.Disp
               ☰
             </Button>
           </DrawerTrigger>
-          {renderDrawerContent()}
+          <div>
+            {renderDrawerContent()}
+          </div>
           </Drawer.Root>
       ) : (
         <Sidebar collapsible="icon">
