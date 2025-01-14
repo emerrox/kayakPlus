@@ -175,7 +175,6 @@ const TableGroup: React.FC<TableGroupProps> = ({ group , fetchGroup}) => {
 ];
 
 
-  // Funciones de manejo (simples, para extender según necesidades)
   const handleEdit =async (email: string, rol:string) => {
       await setRole(group.id, rol === 'writer' ? 'reader' : 'writer', email);
       await fetchGroup(group.id);
