@@ -12,6 +12,7 @@ events: Event[];
 export interface Groups {
   id: string;
   name: string;
+  role:string
 }
 
 export interface Group_extended {
@@ -35,3 +36,5 @@ export interface User_lite {
   email: string;
   role: string;
 }
+
+export interface creteEventProps {groupId: string, summary: string, startTime: string, endTime:string, description: string}

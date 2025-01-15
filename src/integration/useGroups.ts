@@ -64,13 +64,9 @@ const useGroups = () => {
         throw new Error(`Error al ver tus grupos: ${response.statusText}`);
       }
       const data = await response.json();
-      console.log(data);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            toast('Grupos: '+ data.map((group: any) => group.name).join(', '))
       return data;
     } catch (error) {
       console.log('error: ', error);    
-      toast.error('Error al ver tus grupos');
     }
   };
 

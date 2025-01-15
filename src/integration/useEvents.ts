@@ -1,10 +1,14 @@
 import { EVENTS_URL } from "@/apiName";
 import useIsLogged from "@/contexts/useIsLogged";
+import { creteEventProps } from "@/types";
 import { toast } from "sonner";
 const useEvents = ()=>{
   const { token } = useIsLogged.getState();
+
   
-  const createEvent = async () => {
+  
+  
+  const createEvent = async ({groupId, summary, startTime, endTime, description}: creteEventProps) => {
       try {
         const response=await fetch(EVENTS_URL,{
           method: 'POST',
@@ -13,16 +17,16 @@ const useEvents = ()=>{
             "Authorization": token
           },
           body: JSON.stringify({
-            group_id: "ed609083-ccca-4db9-ac70-b60d8ddab034",
+            group_id: groupId,
             event:{
-              summary: 'Reunión de proyecto',
+              summary: summary,
               start: {
-                  dateTime: '2024-12-30T10:00:00-03:00',
+                  dateTime: startTime,
               },
               end: {
-                  dateTime: '2024-12-30T11:00:00-03:00',
+                  dateTime: endTime,
               },
-              description: 'Revisar avances del sprint',
+              description: description,
             }
         })
       })
