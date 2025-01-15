@@ -139,12 +139,12 @@ function ButtonAddSession() {
           {/* Fecha de inicio */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="startDate" className="text-right">
-              Fecha de inicio
+              Fecha y hora
             </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <button
-                  className="col-span-3 flex items-center justify-between w-full px-4 py-2 border rounded-md text-left text-gray-700"
+                  className="col-span-2 flex items-center justify-between w-full px-4 py-2 border rounded-md text-left text-gray-700"
                   type="button"
                 >
                   {startDate
@@ -163,20 +163,19 @@ function ButtonAddSession() {
                 />
               </PopoverContent>
             </Popover>
+
+          <Input
+            type="time"
+            id="startTime"
+            className=" w-fit "
+            value={startTimeInput}
+            onChange={(e) => setStartTimeInput(e.target.value)}
+          />
           </div>
         </div>
 
         <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="startTime" className="text-right">
-            Hora de inicio
-          </Label>
-          <Input
-            id="startTime"
-            placeholder="HH:mm"
-            className="col-span-3"
-            value={startTimeInput}
-            onChange={(e) => setStartTimeInput(e.target.value)}
-          />
+
         </div>
 
 
