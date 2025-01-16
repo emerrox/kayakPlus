@@ -18,6 +18,8 @@ import useEvents from "@/integration/useEvents";
 import { creteEventProps, Groups } from "@/types";
 import useGroups from "@/integration/useGroups";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "./ui/button";
+import { Bloques } from "./Bloques";
 
 function ButtonAddSession() {
   const { createEvent } = useEvents();
@@ -47,23 +49,25 @@ function ButtonAddSession() {
     );
   };
 
+  const handleClear = ()=>{
+      setName("");
+      setDescription("");
+      setStartDate(undefined);
+  }
+
   const handleCreate = async () => {
     if (!name || !description || !startDate || selectedGroups.length === 0 || !startTimeInput) {
       toast.error("Por favor, completa todos los campos.");
       return;
     }
   
-    // Extraer horas y minutos del campo de hora
     const [hours, minutes] = startTimeInput.split(":").map((str) => parseInt(str, 10));
   
-    // Crear una nueva fecha basada en startDate y ajustar la hora
     const adjustedStartDate = new Date(startDate);
-    adjustedStartDate.setHours(hours, minutes, 0, 0); // Establecer hora y minutos
+    adjustedStartDate.setHours(hours, minutes, 0, 0);
   
-    // Formatear startTime
     const formattedStartTime = adjustedStartDate.toISOString();
   
-    // Calcular endTime (una hora después)
     const endDate = new Date(adjustedStartDate);
     endDate.setHours(endDate.getHours() + 1);
     const formattedEndTime = endDate.toISOString();
@@ -83,7 +87,6 @@ function ButtonAddSession() {
       }
       toast.success("Sesión creada exitosamente");
   
-      // Limpiar formulario después de crear el evento
       setName("");
       setDescription("");
       setStartDate(undefined);
@@ -215,10 +218,20 @@ function ButtonAddSession() {
           </Popover>
         </div>
 
+        {/* bloques de entrenamiento */}
+        <Bloques/>
+
         {/* Botón Crear */}
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-between pt-4">
+          <Button
+            variant="outline"
+            onClick={handleClear}
+          >
+            Limpiar
+          </Button>
+
           <button
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-2 px-3 rounded-lg shadow-md items-center hover:scale-105 transition-transform"
             onClick={handleCreate}
           >
             Crear
